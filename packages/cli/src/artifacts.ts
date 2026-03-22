@@ -1,4 +1,5 @@
 import { mkdir, rm, stat } from "node:fs/promises";
+import { isValidJobId } from "./jobs.js";
 import os from "node:os";
 import path from "node:path";
 
@@ -12,6 +13,9 @@ export const artifactFilePath = (jobId: string): string =>
   path.join(artifactDirPath(jobId), artifactFileName(jobId));
 
 export const ensureCleanArtifactDir = async (jobId: string): Promise<string> => {
+  if (!isValidJobId(jobId)) {
+    throw new Error("invalid_job_id");
+  }
   const artifactDir = artifactDirPath(jobId);
   await rm(artifactDir, { recursive: true, force: true });
   await mkdir(artifactDir, { recursive: true });
@@ -19,6 +23,9 @@ export const ensureCleanArtifactDir = async (jobId: string): Promise<string> => 
 };
 
 export const artifactExists = async (jobId: string): Promise<boolean> => {
+  if (!isValidJobId(jobId)) {
+    return false;
+  }
   try {
     const info = await stat(artifactFilePath(jobId));
     return info.isFile();

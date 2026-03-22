@@ -32,11 +32,7 @@ import { MAX_REQUEST_BYTES } from "./utils.js";
 
 const LOCAL_ENV_FILE_URLS = [
   new URL("../.env.local", import.meta.url),
-  new URL("../.env", import.meta.url),
   new URL("../../web-ui/.env.local", import.meta.url),
-  new URL("../../web-ui/.env", import.meta.url),
-  new URL("../../../.env.local", import.meta.url),
-  new URL("../../../.env", import.meta.url),
 ];
 
 let hasLoadedLocalEnvFiles = false;
@@ -695,7 +691,7 @@ export const runApiServer = async (options: {
           return;
         }
 
-        const runId = `run-${Date.now()}-${randomBytes(4).toString("hex")}`;
+        const runId = `run-${crypto.randomUUID()}`;
         const callbackToken = randomBytes(24).toString("hex");
         callbackSessions.set(jobId, { callbackToken, runId });
         runningJobs.add(jobId);
@@ -733,7 +729,7 @@ export const runApiServer = async (options: {
           return;
         }
 
-        const runId = `run-${Date.now()}-${randomBytes(4).toString("hex")}`;
+        const runId = `run-${crypto.randomUUID()}`;
         const callbackToken = randomBytes(24).toString("hex");
         callbackSessions.set(jobId, { callbackToken, runId });
         runningJobs.add(jobId);

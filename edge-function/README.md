@@ -7,7 +7,7 @@ This edge function securely shares two source-project credentials during migrati
 
 You call this endpoint from your migration tool.
 If the request includes the correct `x-access-key`, the function returns the source DB URL and source service role key.
-Use a fresh random key for this migration only, then remove or rotate it after migration is complete.
+Use a fresh random key for this migration only. Rotate or remove it within 24 hours after migration completes.
 
 ## Why these Supabase secrets are needed
 
@@ -32,7 +32,10 @@ This function only gates access to them for migration.
 
 - `ACCESS_KEY` must be long, random, and one-time for this migration.
 - Requests fail unless `x-access-key` exactly matches `ACCESS_KEY`.
-- Rotate/remove `ACCESS_KEY` after migration.
+- Rotate/remove `ACCESS_KEY` within 24 hours after migration completes.
+- Never commit `ACCESS_KEY` to version control or share it publicly.
+- Ensure the endpoint URL uses HTTPS (required for production).
+- Consider implementing rate limiting on the edge function to prevent abuse.
 
 ## Deploy with Lovable
 
